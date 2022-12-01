@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import { createRouter, createWebHistory } from "vue-router"
+import HomeView from "../views/HomeView.vue"
+import LoginView from "../views/auth/LoginView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,6 +11,11 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+    },
+    {
       path: "/about",
       name: "about",
       // route level code-splitting
@@ -18,6 +24,6 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
   ],
-});
+})
 
-export default router;
+export default router

@@ -57,5 +57,9 @@ export default {
       this.$refs.form.resetValidation()
     },
   },
+
+  mounted() {
+    console.log(`${import.meta.env.VITE_API_URL}`)
+  },
 }
 </script>

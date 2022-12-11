@@ -1,65 +1,66 @@
 <template>
-  <v-card elevation="2" max-width="640" class="mx-auto my-12">
-    <v-toolbar color="success">
-      <v-toolbar-title>Login form</v-toolbar-title>
-    </v-toolbar>
-    <v-card-text>
-      <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field
-          v-model="email"
-          :rules="emailRules"
-          label="E-mail"
-          required
-          class="pb-2"
-        ></v-text-field>
+  <v-container>
+    <v-card elevation="2" max-width="640" class="mx-auto my-12">
+      <v-toolbar color="hsla(160, 100%, 37%, 1">
+        <v-toolbar-title>Login</v-toolbar-title>
+      </v-toolbar>
+      <div v-if="isError">
+        <br />
+        <v-alert type="error" class="mx-4"
+          >The username or password is incorrect</v-alert
+        >
+        <br />
+      </div>
+      <v-card-text>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            label="E-mail"
+            required
+            class="pb-2"
+          ></v-text-field>
 
-        <v-text-field
-          type="password"
-          v-model="password"
-          label="Password"
-          required
-        ></v-text-field>
-      </v-form>
-    </v-card-text>
+          <v-text-field
+            type="password"
+            v-model="password"
+            label="Password"
+            required
+          ></v-text-field>
+        </v-form>
+      </v-card-text>
 
-    <v-card-actions>
-      <v-btn color="success" class="mr-4" @click="validate"> Validate </v-btn>
-
-      <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
-
-      <v-btn color="warning" @click="resetValidation"> Reset Validation </v-btn>
-    </v-card-actions>
-  </v-card>
+      <v-card-actions>
+        <v-btn color="hsla(160, 100%, 37%, 1" class="mr-4" @click="login">
+          Login
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    valid: true,
-    password: '',
-    email: '',
-    emailRules: [
-      (v) => !!v || 'E-mail is required',
-      (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-    ],
-  }),
+<script setup>
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import { useAuthStore } from '../stores/authStore'
 
-  methods: {
-    async validate() {
-      const { valid } = await this.$refs.form.validate()
+const authStore = useAuthStore()
+const { isError } = storeToRefs(authStore)
 
-      if (valid) alert('Form is valid')
-    },
-    reset() {
-      this.$refs.form.reset()
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation()
-    },
-  },
+const email = ref('')
+const password = ref('')
+const valid = ref('')
+const emailRules = ref([
+  (v) => !!v || 'E-mail is required',
+  (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+])
+const form = ref(null)
 
-  mounted() {
-    console.log(`${import.meta.env.VITE_API_URL}`)
-  },
+const login = async () => {
+  const { valid } = await form.value.validate()
+
+  if (valid) {
+    authStore.login(email.value, password.value)
+  }
 }
 </script>

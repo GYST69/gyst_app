@@ -1,58 +1,82 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import router from '../router/index.js'
+import router from '@/router/index.js'
+import {
+  getLocalToken,
+  removeLocalToken,
+  setLocalToken,
+} from '@/utils/tokenService'
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/auth`
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
-    token: JSON.parse(localStorage.getItem('token')),
+    token: getLocalToken(),
     returnUlr: null,
     error: false,
   }),
   actions: {
     async register(email, password) {
-      axios
+      await axios
         .post(`${baseUrl}/register/`, {
-          email: email,
-          password: password,
+          email,
+          password,
         })
         .then((response) => {
           const token = response.data
           this.token = token
 
-          localStorage.setItem('token', JSON.stringify(token))
+          setLocalToken(token)
 
           router.push(this.returnUrl || { name: 'me' })
         })
-        .catch((err) => {
+        .catch(() => {
           this.error = true
         })
     },
 
     async login(email, password) {
-      axios
+      await axios
         .post(`${baseUrl}/token/`, {
-          username: email,
-          password: password,
+          email,
+          password,
         })
         .then((response) => {
           const token = response.data
           this.token = token
 
-          localStorage.setItem('token', JSON.stringify(token))
+          setLocalToken(token)
 
           router.push(this.returnUrl || { name: 'me' })
         })
         .catch((err) => {
+          console.log(err)
           this.error = true
         })
     },
 
     logout() {
       this.token = null
-      localStorage.removeItem('token')
+      removeLocalToken()
       router.push({ name: 'login' })
+    },
+
+    async update() {
+      console.log('refresh')
+      await axios
+        .post(`${baseUrl}/token/refresh/`, {
+          refresh: this.token.refresh,
+        })
+        .then((response) => {
+          const token = response.data
+          this.token = token
+
+          setLocalToken(token)
+        })
+        .catch((err) => {
+          console.error(err)
+          this.logout()
+        })
     },
   },
 

@@ -1,23 +1,48 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/authStore'
+import HomeView from '@/views/HomeView.vue'
+import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import MeView from '@/views/MeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
-      name: "home",
+      path: '/',
+      name: 'home',
       component: HomeView,
+      meta: { requiresAuth: false },
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/me',
+      name: 'me',
+      component: MeView,
+      meta: { requiresAuth: true },
     },
   ],
-});
+})
 
-export default router;
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore()
+  const { token } = storeToRefs(authStore)
+
+  if (!token.value && to.meta.requiresAuth) {
+    return { name: 'login' }
+  }
+})
+
+export default router

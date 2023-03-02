@@ -58,9 +58,9 @@
           &copy;2023 Get Your Shit Together All rights reserved
         </div>
       </v-col>
-      <v-col class="pa-0">
+      <v-col class="pa-0 d-none d-md-flex">
         <v-layout full-height>
-          <v-img cover src="/src/assets/img/tablet_desk.jpg"></v-img>
+          <v-img cover src="/src/assets/img/boho.jpg"></v-img>
         </v-layout>
       </v-col>
     </v-row>
@@ -82,6 +82,7 @@ const remember = ref(false)
 const emailRules = ref([
   (v) => !!v || 'E-mail is required',
   (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+  (v) => isError,
 ])
 const form = ref(null)
 
@@ -94,7 +95,7 @@ const login = async () => {
 }
 </script>
 
-<style>
+<style scoped>
 .container {
   display: flex;
   justify-content: center;

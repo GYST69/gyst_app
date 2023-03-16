@@ -50,7 +50,6 @@ export const useAuthStore = defineStore('authStore', {
           router.push(this.returnUrl || { name: 'me' })
         })
         .catch((err) => {
-          console.log(err)
           this.error = true
         })
     },
@@ -68,6 +67,7 @@ export const useAuthStore = defineStore('authStore', {
           refresh: this.token.refresh,
         })
         .then((response) => {
+          console.log(response.data)
           const token = response.data
           this.token = token
 
@@ -87,6 +87,10 @@ export const useAuthStore = defineStore('authStore', {
 
     isError() {
       return this.error
+    },
+
+    getToken() {
+      return getLocalToken()
     },
   },
 })

@@ -82,7 +82,6 @@ const remember = ref(false)
 const emailRules = ref([
   (v) => !!v || 'E-mail is required',
   (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-  (v) => isError,
 ])
 const form = ref(null)
 

@@ -5,8 +5,8 @@ import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import MeView from '@/views/MeView.vue'
-import Calendar from '@/components/Calendar.vue'
-import HabitForm from '@/components/HabitForm.vue'
+import Dashboard from '@/components/Dashboard.vue'
+import HabitList from '@/components/HabitList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,12 +38,12 @@ const router = createRouter({
         {
           path: '',
           name: 'dashboard',
-          component: Calendar,
+          component: Dashboard,
         },
         {
           path: 'habits',
           name: 'habits',
-          component: HabitForm,
+          component: HabitList,
         },
       ],
     },

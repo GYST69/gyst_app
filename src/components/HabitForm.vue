@@ -1,7 +1,31 @@
 <template>
   <v-container>
     <v-sheet width="480" class="mx-auto pa-10">
-      <div v-if="success">Habit saved</div>
+      <div v-if="isSuccess">Habit saved</div>
+      <v-alert
+        v-if="isSuccess"
+        type="info"
+        title="Success"
+        text="Habit saved :)"
+        variant="tonal"
+      ></v-alert>
+      <!-- <v-alert
+        v-if="isError"
+        type="error"
+        title="Error"
+        text="Something went wrong :("
+        variant="tonal"
+      ></v-alert> -->
+
+      <!-- <v-snackbar v-model="isSuccess" multi-line timeout="5000">
+        <v-alert
+          type="info"
+          title="Success"
+          text="Habit saved :)"
+          variant="tonal"
+        ></v-alert>
+      </v-snackbar> -->
+
       <v-form ref="form">
         <v-text-field
           v-model="name"
@@ -58,20 +82,20 @@ const form = ref(null)
 const name = ref('')
 const color = ref('')
 const description = ref('')
-let success = ref(false)
+let isSuccess = ref(false)
+let isError = ref(false)
+const emit = defineEmits(['habit-created', 'habit-error'])
 
 const nameRules = ref([(v) => !!v || 'Name is required'])
 
 const create = () => {
   try {
-    let habitData = habitService.create(
-      name.value,
-      color.value,
-      description.value
-    )
-    success = true
+    habitService.create(name.value, color.value, description.value)
+    isSuccess.value = true
     form.value.reset()
+    emit('habit-created')
   } catch (error) {
+    isError.value = true
     console.log(error)
   }
 }

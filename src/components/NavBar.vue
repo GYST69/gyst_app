@@ -1,28 +1,30 @@
 <template>
-  <v-toolbar color="grey-darken-4">
-    <RouterLink to="/">
-      <v-toolbar-title class="title ml-10">GYST</v-toolbar-title>
-    </RouterLink>
-
-    <v-spacer></v-spacer>
-
-    <div v-if="!isAuthenticated">
-      <RouterLink to="/login">
-        <v-btn> Login </v-btn>
+  <div v-if="isAuthenticated">
+    <v-toolbar color="grey-darken-4">
+      <RouterLink to="/">
+        <v-toolbar-title class="title ml-10">GYST</v-toolbar-title>
       </RouterLink>
 
-      <RouterLink to="/register">
-        <v-btn> Register </v-btn>
-      </RouterLink>
-    </div>
+      <v-spacer></v-spacer>
 
-    <div v-else>
+      <!-- <div v-if="!isAuthenticated">
+        <RouterLink to="/login">
+          <v-btn> Login </v-btn>
+        </RouterLink>
+
+        <RouterLink to="/register">
+          <v-btn> Register </v-btn>
+        </RouterLink>
+      </div>
+
+      <div v-else> -->
       <RouterLink to="/me">
         <v-btn> Account </v-btn>
       </RouterLink>
       <a href=""><v-btn @click="logout"> Logout </v-btn></a>
-    </div>
-  </v-toolbar>
+      <!-- </div> -->
+    </v-toolbar>
+  </div>
 </template>
 
 <script setup>

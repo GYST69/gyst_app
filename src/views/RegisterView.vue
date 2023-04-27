@@ -1,42 +1,64 @@
 <template>
-  <v-container>
-    <v-card elevation="2" max-width="640" class="mx-auto my-12">
-      <v-toolbar color="hsla(160, 100%, 37%, 1">
-        <v-toolbar-title>Register</v-toolbar-title>
-      </v-toolbar>
-      <div v-if="isError">
-        <br />
-        <v-alert type="error" class="mx-4"
-          >Sorry, coud not create account</v-alert
-        >
-        <br />
-      </div>
-      <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-text-field
-            v-model="email"
-            :rules="emailRules"
-            label="E-mail"
-            required
-            class="pb-2"
-          ></v-text-field>
+  <v-main class="container">
+    <v-row class="h-100">
+      <v-col class="pa-0">
+        <div class="left-column pa-5 mx-auto">
+          <v-container>
+            <div v-if="isError">
+              <br />
+              <v-alert type="error"> Sorry, something went wrong </v-alert>
+              <br />
+            </div>
+            <div class="pb-8">
+              <v-card-title class="text-h6 text-md-h5 text-lg-h4"
+                >Sign Up</v-card-title
+              >
+              <v-card-text
+                >Set your goals and make new habit today!</v-card-text
+              >
+            </div>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="Email"
+                required
+                class="pb-2"
+              ></v-text-field>
 
-          <v-text-field
-            type="password"
-            v-model="password"
-            label="Password"
-            required
-          ></v-text-field>
-        </v-form>
-      </v-card-text>
+              <v-text-field
+                type="password"
+                v-model="password"
+                label="Password"
+                required
+              ></v-text-field>
+              <div class="d-inline-flex align-center w-100">
+                <v-checkbox
+                  label="I agree to terms and conditions"
+                  v-model="consent"
+                  color="indigo"
+                ></v-checkbox>
+              </div>
+            </v-form>
 
-      <v-card-actions>
-        <v-btn color="hsla(160, 100%, 37%, 1" class="mr-4" @click="register">
-          Register
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+            <v-btn block size="large" @click="register">Sign Up</v-btn>
+          </v-container>
+          <div class="pa-4 mt-6 w-100">
+            Already have an account?
+            <RouterLink to="/login">Login</RouterLink>
+          </div>
+        </div>
+        <div class="footer">
+          &copy;2023 Get Your Shit Together All rights reserved
+        </div>
+      </v-col>
+      <v-col class="pa-0 d-none d-md-flex">
+        <v-layout full-height>
+          <v-img cover src="/src/assets/img/bird.jpg"></v-img>
+        </v-layout>
+      </v-col>
+    </v-row>
+  </v-main>
 </template>
 
 <script setup>
@@ -49,6 +71,7 @@ const { isError } = storeToRefs(authStore)
 
 const email = ref('')
 const password = ref('')
+const consent = ref('')
 const valid = ref('')
 const emailRules = ref([
   (v) => !!v || 'E-mail is required',
@@ -64,3 +87,31 @@ const register = async () => {
   }
 }
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  max-width: 480px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  padding-bottom: 2rem;
+}
+</style>

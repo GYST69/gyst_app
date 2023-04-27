@@ -50,7 +50,6 @@ export const useAuthStore = defineStore('authStore', {
           router.push(this.returnUrl || { name: 'me' })
         })
         .catch((err) => {
-          console.log(err)
           this.error = true
         })
     },
@@ -62,21 +61,15 @@ export const useAuthStore = defineStore('authStore', {
     },
 
     async update() {
-      console.log('refresh')
-      await axios
-        .post(`${baseUrl}/token/refresh/`, {
+      try {
+        const response = await axios.post(`${baseUrl}/token/refresh/`, {
           refresh: this.token.refresh,
         })
-        .then((response) => {
-          const token = response.data
-          this.token = token
-
-          setLocalToken(token)
-        })
-        .catch((err) => {
-          console.error(err)
-          this.logout()
-        })
+        this.token = response.data
+        setLocalToken(this.token)
+      } catch (error) {
+        console.error('Error refreshing', error)
+      }
     },
   },
 
@@ -87,6 +80,10 @@ export const useAuthStore = defineStore('authStore', {
 
     isError() {
       return this.error
+    },
+
+    getToken() {
+      return getLocalToken()
     },
   },
 })

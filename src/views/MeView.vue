@@ -1,6 +1,12 @@
 <template>
   <v-app>
-    <v-snackbar v-model="habitCreated" multi-line timeout="2000">
+    <v-snackbar
+      v-model="habitCreated"
+      multi-line
+      timeout="2000"
+      location="bottom left"
+      transition="slide-x-transition"
+    >
       <v-alert
         type="info"
         title="Success"
@@ -16,14 +22,7 @@
         Create
 
         <v-dialog v-model="dialog" activator="parent" width="auto">
-          <HabitForm
-            @habit-created="
-              () => {
-                dialog = false
-                habitCreated = true
-              }
-            "
-          />
+          <HabitForm />
         </v-dialog>
       </v-btn>
     </v-app-bar>
@@ -58,17 +57,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { useHabitStore } from '@/stores/habitStore'
+import { storeToRefs } from 'pinia'
 import HabitForm from '@/components/HabitForm.vue'
+
+const habitStore = useHabitStore()
+const authStore = useAuthStore()
 
 const route = useRoute()
 const drawer = ref(null)
 const tab = ref(route.path)
 const dialog = ref(false)
-const habitCreated = ref(false)
-const authStore = useAuthStore()
+
+const habitCreated = storeToRefs(habitStore).success
+
+watch(habitCreated, (value) => {
+  if (value) {
+    dialog.value = false
+  }
+})
 
 const logout = () => {
   authStore.logout()

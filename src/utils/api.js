@@ -29,7 +29,7 @@ const getApi = () => {
     (error) => {
       const authStore = useAuthStore()
       if (error.response.status === 401) {
-        authStore.update().then(() => {
+        return authStore.update().then(() => {
           const token = authStore.getToken
           axios.defaults.headers.common[
             'Authorization'
